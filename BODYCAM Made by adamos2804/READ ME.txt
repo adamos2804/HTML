@@ -1,0 +1,8 @@
+LINIA 126 = IMIE I NAZWISKO
+LINIA 127 = AGENCJA
+LINIA 128 = ODZNAKA
+
+godzina i data ustawia się automatycznie
+
+
+sklejka kilka bodycamów

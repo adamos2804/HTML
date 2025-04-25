@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment.min.js" crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.34/moment-timezone-with-data-10-year-range.min.js"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"
+        type="text/css" />
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet"
+        type="text/css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=IBM+Plex+Mono:wght@300;400;500;600&family=PT+Mono&family=Roboto+Mono:wght@400;500;600&family=Share+Tech+Mono&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body {
+            background-color: rgba(0, 0, 0, 0);
+            margin: 0px auto;
+            overflow: hidden;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 14px;
+            color: #ffffff;
+        }
+
+        .bodyfont-ibmplex {
+            font-family: "IBM Plex Mono";
+        }
+
+        .bodyfont-roboto {
+            font-family: "Roboto Mono";
+        }
+
+        .bodyfont-courier {
+            font-family: "Courier Prime";
+        }
+
+        .bodyfont-pt {
+            font-family: "PT Mono";
+        }
+
+        .bodyfont-sharetech {
+            font-family: "Share Tech Mono";
+        }
+
+        .bodyfont-vcr {
+            font-family: "vcr_osd_monoregular";
+        }
+
+        .Blink {
+            animation: blinker 1.5s cubic-bezier(.5, 0, 1, 1) infinite alternate;
+        }
+
+        @font-face {
+            font-family: 'vcr_osd_monoregular';
+            src: url(FONT/vcr_osd_mono_1.001-webfont.woff2) format('woff2'),
+                url(FONT/vcr_osd_mono_1.001-webfont.woff) format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @keyframes blinker {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+        }
+
+        .top-right {
+            float: right;
+            width: auto;
+            text-align: right;
+        }
+
+        .top-right-container {
+            float: right;
+            width: auto;
+            text-align: right;
+            /* edit the fourth value of the next line to change opacity */
+            /* 0.0 is clear, 1.0 is completely opaque                   */
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 0.5em;
+            margin: 10px;
+            -moz-border-radius: 10px;
+            -webkit-border-radius: 10px;
+            border-radius: 13px;
+        }
+
+        .container {
+            width: 100wh;
+            height: 100vh;
+        }
+    </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>AXON Bodycam</title>
+</head>
+<audio src="audio.mp3" autoplay loop></audio>
+<body>
+    <!-- AXON LOGO -->
+
+    <div class="top-right-container">
+        <div class="top-right">
+            <img src="logo.png" width="77" height="77">
+        </div>
+        <div class="top-right">
+            REC&nbsp;<i class="fa fa-circle text-danger Blink"></i>&nbsp;&nbsp;AXON CAM&trade;&nbsp;&nbsp;<br />
+            <span id="player"></span>
+            [<span id="callsign"></span>]&nbsp;&nbsp;<br />
+            [<span id="agency"></span>]&nbsp;&nbsp;<br />
+            [<span id="dt"></span>]&nbsp;
+            [<span id="ts"></span>]&nbsp;&nbsp;
+        </div>
+    </div>
+</body>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const player = (urlParams.get('player') || "Imie Nazwisko").toUpperCase();
+    const agency = (urlParams.get('agency') || "LAPD").toUpperCase();
+    const callsign = (urlParams.get('callsign') || "Odznaka").toUpperCase(); 
+    const tz = urlParams.get('tz') || moment.tz.guess();
+    const font = urlParams.get('font') || 'ibmplex';
+
+    var animate;
+
+    function init() {
+        document.body.className = 'bodyfont-' + font;
+        $('player', player);
+        $('agency', agency);
+        $('callsign', callsign);
+
+        clock();
+        animate = setInterval(clock, 1000);
+    };
+
+    function clock() {
+        var d = moment();
+
+        if (tz) {
+            d = d.tz(tz);
+        }
+
+        const dateStr = d.format("DD MMM YYYY").trim();
+        const timeStr = d.format("HH : mm : ss z").trim();
+
+        $('dt', dateStr.toUpperCase());
+        $('ts', timeStr.toUpperCase());
+    };
+
+    function $(id, val) {
+        document.getElementById(id).innerHTML = val;
+    };
+
+    document.addEventListener("DOMContentLoaded", init);
+</script>
+
+</html>
